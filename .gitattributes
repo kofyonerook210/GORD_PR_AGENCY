@@ -1,0 +1,4 @@
+# Shell-скрипты и docker-файлы — всегда LF (иначе ломаются на Linux/VPS)
+*.sh    text eol=lf
+Dockerfile text eol=lf
+deploy/Caddyfile text eol=lf
