@@ -1,0 +1,6 @@
+# Зависимости для сборки отчётов/документов GORD PR (кроссплатформенно)
+python-pptx
+openpyxl
+python-docx
+Pillow
+XlsxWriter
