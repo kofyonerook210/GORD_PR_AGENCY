@@ -1,0 +1,5 @@
+# Автоматический HTTPS (Let's Encrypt) + прокси на code-server.
+# DOMAIN подставляется из .env (A-запись домена должна указывать на IP VPS).
+{$DOMAIN} {
+	reverse_proxy code-server:8080
+}

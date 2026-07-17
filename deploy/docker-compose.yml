@@ -1,0 +1,39 @@
+# Разворачивание code-server + Claude Code на VPS за HTTPS (Caddy).
+# Рабочая папка = весь репозиторий (монтируется как проект), поэтому скиллы,
+# CLAUDE.md и правила подхватываются автоматически.
+services:
+  code-server:
+    build: .
+    container_name: gord-code-server
+    environment:
+      - PASSWORD=${CS_PASSWORD}                 # пароль входа в веб-IDE
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}  # опционально; иначе `claude` попросит /login
+    volumes:
+      - ../:/home/coder/project                 # весь репозиторий GORD как проект
+      - cs-config:/home/coder/.config           # настройки/сессии code-server
+      - cs-local:/home/coder/.local             # pip --user, шрифты, кэш
+    working_dir: /home/coder/project
+    expose:
+      - "8080"
+    restart: unless-stopped
+
+  caddy:
+    image: caddy:2
+    container_name: gord-caddy
+    depends_on: [code-server]
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      - DOMAIN=${DOMAIN}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - caddy-data:/data
+      - caddy-config:/config
+    restart: unless-stopped
+
+volumes:
+  cs-config:
+  cs-local:
+  caddy-data:
+  caddy-config:
